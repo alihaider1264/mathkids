@@ -1,12 +1,14 @@
 #include <iostream>
-#include "Grade.h"
+#include "GradeLevel.h"
 #include <time.h>
 
 #define ops_array_size 4
 
 int calculate(int, int, char);
-int getNumber();
-char getOperator(char[ops_array_size]);
+int getNumber(GradeLevel);    //generate random operands
+char getOperator(char[ops_array_size], GradeLevel); //generate random operator
+int getMode();		//question can be printed in different ways i.e., modes
+void printQuestion(int, int, char, int);
 
 int main() {
 
@@ -15,22 +17,24 @@ int main() {
 	bool more = true;
 	char ops[ops_array_size] = { '+', '-', '*', '/' }, op;
 	int operand1, operand2;
+	GradeLevel level = GradeLevel(2);
 
 	while (more != false) {
 
 		int result;
 		char try_again;
-		operand1 = getNumber();
-		operand2 = getNumber();
-		char op = getOperator(ops);
+		operand1 = getNumber(level);
+		operand2 = getNumber(level);
+		char op = getOperator(ops, level);
 
-		std::cout << "Solve:\n" << operand1 << " " << op << " " << operand2 << "=";
+		printQuestion(operand1, operand2, op, getMode());
+		
 		std::cin >> result;
 
 		if (result == calculate(operand1, operand2, op))
-			std::cout << " CORRECT!\n";
+			std::cout << "\t\t\tCORRECT!\n";
 		else
-			std::cout << " WRONG!\n";
+			std::cout << "\t\t\tWRONG!\n";
 
 		std::cout << "Try again? (y/n): ";
 		std::cin >> try_again;
@@ -56,11 +60,38 @@ int calculate(int op1, int op2, char op) {
 	return 0;
 }
 
-int getNumber() {
-	return rand() % 10 + 0;
+int getNumber(GradeLevel level) {
+	if(level.getGradeLevel() == 1 )
+		return rand() % 10 + 0;
+	else if (level.getGradeLevel() == 2)
+		return rand() % 100 + 0;
 }
 
-char getOperator(char ops[ops_array_size]) {
-	int bound = ops_array_size - 1;
+char getOperator(char ops[ops_array_size], GradeLevel level) {
+	int bound = 10;
+
+	if (level.getGradeLevel() == 1) 
+		bound = ops_array_size - 3;
+	if (level.getGradeLevel() == 2)
+		bound = ops_array_size - 2;
+	if (level.getGradeLevel() == 3)
+		bound = ops_array_size - 1;
+
 	return ops[rand() % bound + 0];
+}
+
+int getMode() {
+	return rand() % 2 + 0;
+}
+
+void printQuestion(int operand1, int operand2, char op, int mode) {
+
+	if (mode == 0) {		//linear
+		std::cout << "Solve:\n  " << operand1 << " " << op << " " << operand2 << " = ";
+	}
+	else if (mode == 1) {	//stacked
+		std::cout << "Solve:\n  " << operand1 << "\n" << op << " " << operand2 << "\n-----\n";
+	}
+
+
 }
