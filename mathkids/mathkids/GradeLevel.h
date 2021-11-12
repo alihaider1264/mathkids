@@ -7,7 +7,7 @@ public:
 	GradeLevel() : grade_level(1) {}
 	GradeLevel(const int& l) : grade_level(l) {}
 	int getGradeLevel() { return grade_level; }
-	int setGradeLevel(const int &l) { grade_level = l; }
+	void setGradeLevel(const int &l) { grade_level = l; }
 	~GradeLevel() {}
 };
 
