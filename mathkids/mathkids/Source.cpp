@@ -15,24 +15,28 @@ int main() {
 
 	std::cout << "Welcome to Maths!\n";
 	srand(time(NULL));
-	bool more = true;
 	char ops[ops_array_size] = { '+', '-', '*', '/' };
 	char op;
 	int operand1, operand2;
-	GradeLevel level = GradeLevel(1);
+	GradeLevel level = GradeLevel();
 	Score myScore = Score();
 
-	while (more != false) {
+	int grade, no_questions;
+	std::cout << "Enter grade: ";
+	std::cin >> grade;
+	level.setGradeLevel(grade);
+
+	std::cout << "How many questions?: ";
+	std::cin >> no_questions;
+
+	for (int i=0;i<no_questions;i++){
 
 		int result;
-		char try_again;
 		operand1 = getNumber(level);
 		char op = getOperator(ops, level);
 		operand2 = getNumber(level);
 		
-
 		printQuestion(operand1, operand2, op, getMode());
-		
 		std::cin >> result;
 
 		if (result == calculate(operand1, operand2, op)){
@@ -44,14 +48,9 @@ int main() {
 			}
 		
 		myScore.inc_total();
-		std::cout << "Try again? (y/n): ";
-		std::cin >> try_again;
-
-		if (try_again == 'n' || try_again == 'N'){
-			more = false;
-			std::cout << "Score: " << myScore.getCorrect() << "/" << myScore.getTotal() << " " << myScore.getScore() << "\n";
-		}
 	}
+
+	std::cout << "Score: " << myScore.getCorrect() << "/" << myScore.getTotal() << " " << myScore.getScore() << "\n";
 }
 
 
@@ -77,11 +76,10 @@ int getNumber(GradeLevel level) {
 }
 
 char getOperator(char ops[ops_array_size], GradeLevel level) {
-	int bound = 10;
+	int bound = ops_array_size;
 
-	if (level.getGradeLevel() == 1) bound = ops_array_size - 3;
-	if (level.getGradeLevel() == 2) bound = ops_array_size - 2;
-	if (level.getGradeLevel() == 3) bound = ops_array_size - 1;
+	if (level.getGradeLevel() == 1 || level.getGradeLevel() == 2) bound = ops_array_size - 2;
+	else if (level.getGradeLevel() == 3) bound = ops_array_size - 1;
 
 	return ops[rand() % bound + 0];
 }
