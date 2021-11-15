@@ -4,12 +4,6 @@
 #include "Quiz.h"
 #include <time.h>
 
-#define ops_array_size 4
-
-int calculate(int, int, char);
-int getNumber(GradeLevel);    //generate random operands
-char getOperator(char[ops_array_size], GradeLevel); //generate random operator
-int getMode();		//question can be printed in different ways i.e., modes
 void printQuestion(int, int, char, int);
 
 int main() {
