@@ -45,10 +45,10 @@ public:
 		myScore = Score();
 	}
 
-	int calculate();
-	int getNumber();
-	char getOperator();
-	int getMode();
+	int calculate();		//solve the problem and get result
+	int getNumber();		//generate random operand value
+	char getOperator();		//pick an operator randomly from available operators
+	int getMode();			//pick a question display mode randomly
 	Question generateQuestion();
 	bool checkQuestion(Question, int);
 	Score getScore();
