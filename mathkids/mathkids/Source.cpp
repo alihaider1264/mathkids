@@ -20,7 +20,7 @@ int main() {
 	Question Q;
 	for (int i = 0; i < no_questions; i++) {
 		Q = myQuiz.generateQuestion();
-		printQuestion(Q, myQuiz.getMode(), myQuiz.diplay_number_line());
+		printQuestion(Q, myQuiz.getMode(), myQuiz.display_num_line());
 
 		int result;
 		std::cin >> result;
