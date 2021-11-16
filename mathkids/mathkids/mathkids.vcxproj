@@ -143,8 +143,10 @@
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="GradeLevel.h" />
+    <ClInclude Include="Question.h" />
     <ClInclude Include="Quiz.h" />
     <ClInclude Include="Score.h" />
+    <ClInclude Include="Split.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

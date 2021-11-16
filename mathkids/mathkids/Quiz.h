@@ -5,29 +5,44 @@
 #include <fstream>
 #include "GradeLevel.h"
 #include "Score.h"
-#include <time.h>
+#include "Question.h"
+#include <ctime>
 #include <string>
 #include <vector>
+#include "Split.h"
 
-struct Question {
-	int operand1;
-	int operand2;
-	int op;
-};
+
 
 class Quiz {
 	std::vector<char> ops;
-	char op;
-	int operand1, operand2;
 	GradeLevel level;
 	Score myScore;
+	Question Q;
+	int question_display_modes;
+	bool display_number_line;
 public:
 	Quiz(const int &grade) {
 		srand(time(NULL));
+		std::string line;
+		std::vector<std::string> split_line;
+		std::ifstream f;
+		
+		//read config.json file
+		f.open("config.dat");
+		if (f.is_open()) {
+			std::getline(f, line);
+			question_display_modes = split(line, '=', 2);
+
+			std::getline(f, line);
+			display_number_line = split(line, '=', 2);
+		}
+		else {
+			std::cout << "Couldn't open config.dat file\n";
+		}
+
+		f.close();
 		
 		//populate operators from operators.dat
-		std::string line;
-		std::ifstream f;
 		f.open("data/operators.dat");
 		if (f.is_open()) {
 			while (f) {
@@ -39,8 +54,8 @@ public:
 			std::cout << "Couldn't open data/operators.dat file\n";
 		}
 		//
-
-		op = ' '; operand1 = 0; operand2 = 0;
+		f.close();
+		
 		level = GradeLevel(grade);
 		myScore = Score();
 	}
@@ -52,16 +67,17 @@ public:
 	Question generateQuestion();
 	bool checkQuestion(Question, int);
 	Score getScore();
+	bool diplay_number_line();
 	~Quiz() {}
 };
 
 int Quiz::calculate() {
 
-	switch (op) {
-	case '+': return operand1 + operand2;
-	case '-': return operand1 - operand2;
-	case '*': return operand1 * operand2;
-	case '/': return operand1 / operand2;
+	switch (Q.getOperator()) {
+	case '+': return Q.getOperand1() + Q.getOperand2();
+	case '-': return Q.getOperand1() - Q.getOperand2();
+	case '*': return Q.getOperand1() * Q.getOperand2();
+	case '/': return Q.getOperand1() / Q.getOperand2();
 	}
 
 	return 0;
@@ -79,34 +95,36 @@ int Quiz::getNumber() {
 char Quiz::getOperator() {
 	int bound = ops.size();
 
-	if (level.getGradeLevel() == 1 || level.getGradeLevel() == 2) bound = 3;
+	if (level.getGradeLevel() == 1 || level.getGradeLevel() == 2) bound = 2;
 	else if (level.getGradeLevel() == 3) bound = 4;
 
 	return ops[rand() % bound + 0];
 }
 
 int Quiz::getMode() {
-	return rand() % 3 + 0;
+	return rand() % question_display_modes + 0;
 }
 
 
 Question Quiz::generateQuestion() {
-	Question Q;
 
-	operand1 = getNumber();
-	op = getOperator();
-	operand2 = getNumber();
+	//randomize numerical and textual questions
+	//numerical
+	//Q = Question(getNumber(), getNumber(), getOperator(), false, "");
+	//Q.setResult(calculate());
 
-	Q.operand1 = operand1;
-	Q.operand2 = operand2;
-	Q.op = op;
-	
+
+	//split question text here
+	//textual
+	Q = Question(0, 0, ' ', true, "");
+	Q = Q.selectRandomTextQuestion();
+
 	return Q;
 }
 
 bool Quiz::checkQuestion(Question Q, int result) {
 
-	if (result == calculate()) {
+	if (result == Q.getResult()) {
 		myScore.inc_correct();
 		myScore.inc_total();
 		return true;
@@ -118,9 +136,23 @@ bool Quiz::checkQuestion(Question Q, int result) {
 }
 
 Score Quiz::getScore() {
+	struct tm newtime;
+	time_t now = time(0);
+	localtime_s(&newtime, &now);
+	std::ofstream f;
+	f.open("data/results.csv",std::ios_base::app);
+	if(f.is_open()){
+		f << newtime.tm_mon << "/" << newtime.tm_mday << "/" << 1900 + newtime.tm_year << " "
+		<< newtime.tm_hour << ":" << newtime.tm_min << "," << std::to_string(myScore.getCorrect())
+		+ "," + std::to_string(myScore.getTotal())+"\n";
+	}
+	f.close();
 	return myScore;
 }
 
+bool Quiz::diplay_number_line(){
+	return (int)display_number_line == 1;
+}
 
 
 #endif
