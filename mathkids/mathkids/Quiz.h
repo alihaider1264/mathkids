@@ -8,6 +8,7 @@
 #include <time.h>
 #include <string>
 #include <vector>
+//#include <boost/algorithm/split.hpp>
 
 struct Question {
 	int operand1;
@@ -21,13 +22,34 @@ class Quiz {
 	int operand1, operand2;
 	GradeLevel level;
 	Score myScore;
+	int question_display_modes;
+	bool display_number_line;
 public:
 	Quiz(const int &grade) {
 		srand(time(NULL));
-		
-		//populate operators from operators.dat
 		std::string line;
+		std::vector<std::string> split_line;
 		std::ifstream f;
+		/*
+		//read .config file
+		f.open(".config");
+		if (f.is_open()) {
+			std::getline(f, line);
+			boost::split(split_line, line, boost::is_any_of("="));
+			question_display_modes = split_line[1];
+
+			std::getline(f, line);
+			boost::split(split_line, line, boost::is_any_of(","));
+			display_number_line = split_line[1];
+			}
+		}
+		else {
+			std::cout << "Couldn't open data/operators.dat file\n";
+		}
+
+		f.close();
+		*/
+		//populate operators from operators.dat
 		f.open("data/operators.dat");
 		if (f.is_open()) {
 			while (f) {
@@ -39,7 +61,7 @@ public:
 			std::cout << "Couldn't open data/operators.dat file\n";
 		}
 		//
-
+		f.close();
 		op = ' '; operand1 = 0; operand2 = 0;
 		level = GradeLevel(grade);
 		myScore = Score();
@@ -52,6 +74,7 @@ public:
 	Question generateQuestion();
 	bool checkQuestion(Question, int);
 	Score getScore();
+	bool diplay_number_line();
 	~Quiz() {}
 };
 
@@ -79,7 +102,7 @@ int Quiz::getNumber() {
 char Quiz::getOperator() {
 	int bound = ops.size();
 
-	if (level.getGradeLevel() == 1 || level.getGradeLevel() == 2) bound = 3;
+	if (level.getGradeLevel() == 1 || level.getGradeLevel() == 2) bound = 2;
 	else if (level.getGradeLevel() == 3) bound = 4;
 
 	return ops[rand() % bound + 0];
@@ -91,12 +114,12 @@ int Quiz::getMode() {
 
 
 Question Quiz::generateQuestion() {
-	Question Q;
 
 	operand1 = getNumber();
 	op = getOperator();
 	operand2 = getNumber();
 
+	Question Q;
 	Q.operand1 = operand1;
 	Q.operand2 = operand2;
 	Q.op = op;
@@ -118,9 +141,22 @@ bool Quiz::checkQuestion(Question Q, int result) {
 }
 
 Score Quiz::getScore() {
+	time_t now = time(0);
+	tm *ltm = localtime(&now);
+	std::ofstream f;
+	f.open("data/results.csv",std::ios_base::app);
+	if(f.is_open()){
+		f << ltm->tm_mon << "/" << ltm->tm_mday << "/" << 1900 + ltm->tm_year << " " 
+		<< ltm->tm_hour << ":" << ltm->tm_min << "," << std::to_string(myScore.getCorrect()) 
+		+ "," + std::to_string(myScore.getTotal())+"\n";
+	}
+	f.close();
 	return myScore;
 }
 
+bool Quiz::diplay_number_line(){
+	return (int)display_number_line == 1;
+}
 
 
 #endif

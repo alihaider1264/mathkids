@@ -4,7 +4,7 @@
 #include "Quiz.h"
 #include <time.h>
 
-void printQuestion(int, int, char, int);
+void printQuestion(int, int, char, int, bool);
 
 int main() {
 
@@ -22,7 +22,7 @@ int main() {
 		Q = myQuiz.generateQuestion();
 
 		int result;
-		printQuestion(Q.operand1, Q.operand2, Q.op, myQuiz.getMode());
+		printQuestion(Q.operand1, Q.operand2, Q.op, myQuiz.getMode(), myQuiz.diplay_number_line());
 		std::cin >> result;
 
 
@@ -34,13 +34,24 @@ int main() {
 	}
 
 	Score myScore = myQuiz.getScore();
-	std::cout << "Score: " << myScore.getCorrect() << "/" << myScore.getTotal() << " " << myScore.getScore() << "\n";
+	std::cout << "Score: " << myScore.getCorrect() << "/" << myScore.getTotal() << " " << myScore.getScore()*100 << "% \n";
 }
 
 
 
-void printQuestion(int operand1, int operand2, char op, int mode) {
-
+void printQuestion(int operand1, int operand2, char op, int mode, bool display_num_line) {
+	//print a number line
+	if(display_num_line){
+		std::cout<<"Number line:\n";
+		if (op == '-' || op == '+'){
+			for(int i=-10;i<=10;i++){
+				std::cout << i << " ";
+			}
+			std::cout<<"\n";
+		}
+	}
+	
+	//print question
 	if (mode == 0) {		//linear
 		std::cout << "Solve:\n  " << operand1 << " " << op << " " << operand2 << " = ";
 	}
@@ -48,7 +59,7 @@ void printQuestion(int operand1, int operand2, char op, int mode) {
 		std::cout << "Solve:\n  " << operand1 << "\n" << op << " " << operand2 << "\n-----\n";
 	}
 	else if (mode == 2) {	//reverse
-		std::cout << "Solve:\n  ? = " << operand1 << " " << op << " " << operand2 << "\r"; 
+		std::cout << "Solve:\n   = " << operand1 << " " << op << " " << operand2 << "\r"; 
 	}
 
 }
