@@ -67,7 +67,7 @@ public:
 	Question generateQuestion();
 	bool checkQuestion(Question, int);
 	Score getScore();
-	bool diplay_number_line();
+	bool display_num_line();
 	~Quiz() {}
 };
 
@@ -107,18 +107,21 @@ int Quiz::getMode() {
 
 
 Question Quiz::generateQuestion() {
+	int random_num = rand() % 2 + 0;
 
-	//randomize numerical and textual questions
-	//numerical
-	//Q = Question(getNumber(), getNumber(), getOperator(), false, "");
-	//Q.setResult(calculate());
+	switch (random_num) {
+		
+	case 0:
+		//numerical
+		Q = Question(getNumber(), getNumber(), getOperator(), false, "");
+		Q.setResult(calculate());
+		break;
 
-
-	//split question text here
-	//textual
-	Q = Question(0, 0, ' ', true, "");
-	Q = Q.selectRandomTextQuestion();
-
+	case 1:
+		//textual
+		Q = Question(0, 0, ' ', true, "");
+		Q = Q.selectRandomTextQuestion();
+	}
 	return Q;
 }
 
@@ -150,7 +153,7 @@ Score Quiz::getScore() {
 	return myScore;
 }
 
-bool Quiz::diplay_number_line(){
+bool Quiz::display_num_line(){
 	return (int)display_number_line == 1;
 }
 
