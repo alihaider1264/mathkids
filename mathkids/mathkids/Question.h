@@ -4,6 +4,7 @@
 #include <string>
 #include <vector>
 #include <fstream>
+#include "Split.h"
 
 class Question{
 	int operand1;
@@ -16,10 +17,7 @@ class Question{
 
 public:
     Question():
-            operand1(0), operand2(0), op(' '), isTextual(false), text(""), result(0){
-        
-		
-            }
+            operand1(0), operand2(0), op(' '), isTextual(false), text(""), result(0){}
     Question(int op1, int op2, char oper, bool isText, std::string txt):
             operand1(op1), operand2(op2), op(oper), isTextual(isText), text(txt), result(0){
         //read textual questions
@@ -33,7 +31,7 @@ public:
 			}
 		}
 		else {
-			std::cout << "Couldn't open data/operators.dat file\n";
+			std::cout << "Couldn't open data/textual_questions.dat file\n";
 		}
 		//
 		f.close();
@@ -46,16 +44,32 @@ public:
     int getOperand2() { return operand2; }
     char getOperator() { return op; }
     bool setResult(int res) { result = res; return true;}
-    std::string selectRandomTextQuestion();
+    Question selectRandomTextQuestion();
+    void printQuestions();
     ~Question(){}
 
 };
 
 
-std::string Question::selectRandomTextQuestion() {
+Question Question::selectRandomTextQuestion() {
 
-    return text_questions[rand() % text_questions.size() + 0];
+    isTextual = true;
+    int bound = text_questions.size() - 1;
+    std::string Q_str = text_questions[rand() % bound  + 0];
+    text = split(Q_str,',',2,true);
+    result = split(Q_str, ',', 3);
+    std::cout << text << " " << result;
 
+    return *this;
 }
+
+void Question::printQuestions() {
+    std::cout << "\nQuestions:\n";
+    for (auto x : text_questions) {
+        std::cout << x << "\n";
+    }
+}
+
+
 
 #endif

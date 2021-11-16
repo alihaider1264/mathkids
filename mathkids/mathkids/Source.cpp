@@ -4,7 +4,7 @@
 #include "Quiz.h"
 #include <time.h>
 
-void printQuestion(int, int, char, int, bool);
+void printQuestion(Question, int, bool);
 
 int main() {
 
@@ -20,9 +20,9 @@ int main() {
 	Question Q;
 	for (int i = 0; i < no_questions; i++) {
 		Q = myQuiz.generateQuestion();
+		printQuestion(Q, myQuiz.getMode(), myQuiz.diplay_number_line());
 
 		int result;
-		printQuestion(Q.getOperand1(), Q.getOperand2(), Q.getOperator(), myQuiz.getMode(), myQuiz.diplay_number_line());
 		std::cin >> result;
 
 
@@ -39,27 +39,33 @@ int main() {
 
 
 
-void printQuestion(int operand1, int operand2, char op, int mode, bool display_num_line) {
+void printQuestion(Question Q, int mode, bool display_num_line) {
 	//print a number line
-	if(display_num_line){
-		std::cout<<"Number line:\n";
-		if (op == '-' || op == '+'){
-			for(int i=-10;i<=10;i++){
-				std::cout << i << " ";
+	if (Q.isText()) {
+		std::cout << "Question: " << Q.getText() << ": ";
+	}
+	else {
+		if (display_num_line) {
+			std::cout << "Number line:\n";
+			if (Q.getOperator() == '-' || Q.getOperator() == '+') {
+				for (int i = -10; i <= 10; i++) {
+					std::cout << i << " ";
+				}
+				std::cout << "\n";
 			}
-			std::cout<<"\n";
+		}
+
+		//print question
+		if (mode == 0) {		//linear
+			std::cout << "Solve:\n  " << Q.getOperand1() << " " << Q.getOperator() << " " << Q.getOperand2() << " = ";
+		}
+		else if (mode == 1) {	//stacked
+			std::cout << "Solve:\n  " << Q.getOperand1() << "\n" << Q.getOperator() << " " << Q.getOperand2() << "\n-----\n";
+		}
+		else if (mode == 2) {	//reverse
+			std::cout << "Solve:\n   = " << Q.getOperand1() << " " << Q.getOperator() << " " << Q.getOperand2() << "\r";
 		}
 	}
-	
-	//print question
-	if (mode == 0) {		//linear
-		std::cout << "Solve:\n  " << operand1 << " " << op << " " << operand2 << " = ";
-	}
-	else if (mode == 1) {	//stacked
-		std::cout << "Solve:\n  " << operand1 << "\n" << op << " " << operand2 << "\n-----\n";
-	}
-	else if (mode == 2) {	//reverse
-		std::cout << "Solve:\n   = " << operand1 << " " << op << " " << operand2 << "\r"; 
-	}
+
 
 }

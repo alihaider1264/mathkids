@@ -6,10 +6,11 @@
 #include "GradeLevel.h"
 #include "Score.h"
 #include "Question.h"
-#include <time.h>
+#include <ctime>
 #include <string>
 #include <vector>
-//#include <boost/algorithm/split.hpp>
+#include "Split.h"
+
 
 
 class Quiz {
@@ -25,26 +26,22 @@ public:
 		std::string line;
 		std::vector<std::string> split_line;
 		std::ifstream f;
-		display_number_line=1;
-		/*
-		//read .config file
-		f.open(".config");
+		
+		//read config.json file
+		f.open("config.dat");
 		if (f.is_open()) {
 			std::getline(f, line);
-			boost::split(split_line, line, boost::is_any_of("="));
-			question_display_modes = split_line[1];
+			question_display_modes = split(line, '=', 2);
 
 			std::getline(f, line);
-			boost::split(split_line, line, boost::is_any_of(","));
-			display_number_line = split_line[1];
-			}
+			display_number_line = split(line, '=', 2);
 		}
 		else {
-			std::cout << "Couldn't open data/operators.dat file\n";
+			std::cout << "Couldn't open config.dat file\n";
 		}
 
 		f.close();
-		*/
+		
 		//populate operators from operators.dat
 		f.open("data/operators.dat");
 		if (f.is_open()) {
@@ -113,14 +110,15 @@ Question Quiz::generateQuestion() {
 
 	//randomize numerical and textual questions
 	//numerical
-	Q = Question(getNumber(), getNumber(), getOperator(), false, "");
-	Q.setResult(calculate());
+	//Q = Question(getNumber(), getNumber(), getOperator(), false, "");
+	//Q.setResult(calculate());
 
 
 	//split question text here
 	//textual
-	Q = Question(0,0,' ',true,Q.selectRandomTextQuestion());
-	Q.setResult(0); //set result after split
+	Q = Question(0, 0, ' ', true, "");
+	//Q.printQuestions();
+	Q = Q.selectRandomTextQuestion();
 
 	return Q;
 }
@@ -139,13 +137,14 @@ bool Quiz::checkQuestion(Question Q, int result) {
 }
 
 Score Quiz::getScore() {
+	struct tm newtime;
 	time_t now = time(0);
-	tm *ltm = localtime(&now);
+	localtime_s(&newtime, &now);
 	std::ofstream f;
 	f.open("data/results.csv",std::ios_base::app);
 	if(f.is_open()){
-		f << ltm->tm_mon << "/" << ltm->tm_mday << "/" << 1900 + ltm->tm_year << " " 
-		<< ltm->tm_hour << ":" << ltm->tm_min << "," << std::to_string(myScore.getCorrect()) 
+		f << newtime.tm_mon << "/" << newtime.tm_mday << "/" << 1900 + newtime.tm_year << " "
+		<< newtime.tm_hour << ":" << newtime.tm_min << "," << std::to_string(myScore.getCorrect())
 		+ "," + std::to_string(myScore.getTotal())+"\n";
 	}
 	f.close();
