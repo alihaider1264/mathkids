@@ -9,8 +9,29 @@
 std::string strings[max];
 
  
-    int split(std::string str, char seperator, int return_location)
+int split(std::string str, char seperator, int return_location)
+{
+    int currIndex = 0, i = 0;
+    int startIndex = 0, endIndex = 0;
+    while (i <= str.length())
     {
+        if (str[i] == seperator || i == str.length())
+        {
+            endIndex = i;
+            std::string subStr = "";
+            subStr.append(str, startIndex, endIndex - startIndex);
+            strings[currIndex] = subStr;
+            currIndex += 1;
+            startIndex = endIndex + 1;
+        }
+        i++;
+    }
+    return std::stoi(strings[return_location - 1]);
+}
+
+std::string split(std::string str, char seperator, int return_location, bool return_string)
+{
+    if (return_string) {
         int currIndex = 0, i = 0;
         int startIndex = 0, endIndex = 0;
         while (i <= str.length())
@@ -26,27 +47,6 @@ std::string strings[max];
             }
             i++;
         }
-        return std::stoi(strings[return_location - 1]);
+        return strings[return_location - 1];
     }
-
-    std::string split(std::string str, char seperator, int return_location, bool return_string)
-    {
-        if (return_string) {
-            int currIndex = 0, i = 0;
-            int startIndex = 0, endIndex = 0;
-            while (i <= str.length())
-            {
-                if (str[i] == seperator || i == str.length())
-                {
-                    endIndex = i;
-                    std::string subStr = "";
-                    subStr.append(str, startIndex, endIndex - startIndex);
-                    strings[currIndex] = subStr;
-                    currIndex += 1;
-                    startIndex = endIndex + 1;
-                }
-                i++;
-            }
-            return strings[return_location - 1];
-        }
-    }
+}

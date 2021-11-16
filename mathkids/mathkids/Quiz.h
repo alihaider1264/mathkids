@@ -102,7 +102,7 @@ char Quiz::getOperator() {
 }
 
 int Quiz::getMode() {
-	return rand() % 3 + 0;
+	return rand() % question_display_modes + 0;
 }
 
 
@@ -117,7 +117,6 @@ Question Quiz::generateQuestion() {
 	//split question text here
 	//textual
 	Q = Question(0, 0, ' ', true, "");
-	//Q.printQuestions();
 	Q = Q.selectRandomTextQuestion();
 
 	return Q;

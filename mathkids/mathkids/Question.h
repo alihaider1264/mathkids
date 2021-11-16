@@ -58,17 +58,19 @@ Question Question::selectRandomTextQuestion() {
     std::string Q_str = text_questions[rand() % bound  + 0];
     text = split(Q_str,',',2,true);
     result = split(Q_str, ',', 3);
-    std::cout << text << " " << result;
+    //std::cout << text << " " << result;
 
     return *this;
 }
 
+//not needed
 void Question::printQuestions() {
     std::cout << "\nQuestions:\n";
     for (auto x : text_questions) {
         std::cout << x << "\n";
     }
 }
+
 
 
 
