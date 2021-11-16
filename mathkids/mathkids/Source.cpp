@@ -22,7 +22,7 @@ int main() {
 		Q = myQuiz.generateQuestion();
 
 		int result;
-		printQuestion(Q.operand1, Q.operand2, Q.op, myQuiz.getMode(), myQuiz.diplay_number_line());
+		printQuestion(Q.getOperand1(), Q.getOperand2(), Q.getOperator(), myQuiz.getMode(), myQuiz.diplay_number_line());
 		std::cin >> result;
 
 

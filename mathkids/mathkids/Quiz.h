@@ -5,23 +5,18 @@
 #include <fstream>
 #include "GradeLevel.h"
 #include "Score.h"
+#include "Question.h"
 #include <time.h>
 #include <string>
 #include <vector>
 //#include <boost/algorithm/split.hpp>
 
-struct Question {
-	int operand1;
-	int operand2;
-	int op;
-};
 
 class Quiz {
 	std::vector<char> ops;
-	char op;
-	int operand1, operand2;
 	GradeLevel level;
 	Score myScore;
+	Question Q;
 	int question_display_modes;
 	bool display_number_line;
 public:
@@ -30,6 +25,7 @@ public:
 		std::string line;
 		std::vector<std::string> split_line;
 		std::ifstream f;
+		display_number_line=1;
 		/*
 		//read .config file
 		f.open(".config");
@@ -62,7 +58,7 @@ public:
 		}
 		//
 		f.close();
-		op = ' '; operand1 = 0; operand2 = 0;
+		
 		level = GradeLevel(grade);
 		myScore = Score();
 	}
@@ -80,11 +76,11 @@ public:
 
 int Quiz::calculate() {
 
-	switch (op) {
-	case '+': return operand1 + operand2;
-	case '-': return operand1 - operand2;
-	case '*': return operand1 * operand2;
-	case '/': return operand1 / operand2;
+	switch (Q.getOperator()) {
+	case '+': return Q.getOperand1() + Q.getOperand2();
+	case '-': return Q.getOperand1() - Q.getOperand2();
+	case '*': return Q.getOperand1() * Q.getOperand2();
+	case '/': return Q.getOperand1() / Q.getOperand2();
 	}
 
 	return 0;
@@ -115,21 +111,23 @@ int Quiz::getMode() {
 
 Question Quiz::generateQuestion() {
 
-	operand1 = getNumber();
-	op = getOperator();
-	operand2 = getNumber();
+	//randomize numerical and textual questions
+	//numerical
+	Q = Question(getNumber(), getNumber(), getOperator(), false, "");
+	Q.setResult(calculate());
 
-	Question Q;
-	Q.operand1 = operand1;
-	Q.operand2 = operand2;
-	Q.op = op;
-	
+
+	//split question text here
+	//textual
+	Q = Question(0,0,' ',true,Q.selectRandomTextQuestion());
+	Q.setResult(0); //set result after split
+
 	return Q;
 }
 
 bool Quiz::checkQuestion(Question Q, int result) {
 
-	if (result == calculate()) {
+	if (result == Q.getResult()) {
 		myScore.inc_correct();
 		myScore.inc_total();
 		return true;
