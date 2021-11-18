@@ -6,3 +6,6 @@ Kids will also become comfortable with the terminal and typing, and computers in
 GUI likely in the future.
 
 This is a work in progress.
+
+#CONTRIBUTING
+To contribute, please have a look at open issues. Also, create an issue and link to your PR if working on an issue not listed.
