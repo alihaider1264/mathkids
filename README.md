@@ -8,4 +8,4 @@ GUI likely in the future.
 This is a work in progress.
 
 # Contributing
-To contribute, please have a look at open issues. Also, create an issue and link to your PR if working on an issue not listed.
+To contribute, please have a look at open issues.
