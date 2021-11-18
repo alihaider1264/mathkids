@@ -65,7 +65,7 @@ public:
 	char getOperator();		//pick an operator randomly from available operators
 	int getMode();			//pick a question display mode randomly
 	Question generateQuestion();
-	bool checkQuestion(Question, int);
+	bool checkQuestion(Question, double);
 	Score getScore();
 	bool display_num_line();
 	~Quiz() {}
@@ -125,7 +125,7 @@ Question Quiz::generateQuestion() {
 	return Q;
 }
 
-bool Quiz::checkQuestion(Question Q, int result) {
+bool Quiz::checkQuestion(Question Q, double result) {
 
 	if (result == Q.getResult()) {
 		myScore.inc_correct();
