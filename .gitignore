@@ -388,3 +388,4 @@ FodyWeavers.xsd
 *.sln.iml
 
 /mathkids/mathkids/data/results.csv
+mathkids/mathkids/_data/.DS_Store

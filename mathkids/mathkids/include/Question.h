@@ -23,7 +23,7 @@ public:
         //read textual questions
         std::string line;
         std::ifstream f;
-        f.open("data/textual_questions.csv");
+        f.open("_data/textual_questions.csv");
 		if (f.is_open()) {
 			while (f) {
 				std::getline(f, line);
@@ -31,7 +31,7 @@ public:
 			}
 		}
 		else {
-			std::cout << "Couldn't open data/textual_questions.dat file\n";
+			std::cout << "Couldn't open _data/textual_questions.dat file\n";
 		}
 		//
 		f.close();
