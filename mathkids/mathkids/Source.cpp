@@ -1,7 +1,7 @@
 #include <iostream>
-#include "GradeLevel.h"
-#include "Score.h"
-#include "Quiz.h"
+#include "include/GradeLevel.h"
+#include "include/Score.h"
+#include "include/Quiz.h"
 #include <time.h>
 
 void printQuestion(Question, int, bool);

@@ -43,7 +43,7 @@ public:
 		f.close();
 		
 		//populate operators from operators.dat
-		f.open("data/operators.dat");
+		f.open("_data/operators.dat");
 		if (f.is_open()) {
 			while (f) {
 				std::getline(f, line);
@@ -51,7 +51,7 @@ public:
 			}
 		}
 		else {
-			std::cout << "Couldn't open data/operators.dat file\n";
+			std::cout << "Couldn't open _data/operators.dat file\n";
 		}
 		//
 		f.close();
@@ -143,7 +143,7 @@ Score Quiz::getScore() {
 	time_t now = time(0);
 	localtime_s(&newtime, &now);
 	std::ofstream f;
-	f.open("data/results.csv",std::ios_base::app);
+	f.open("_data/results.csv",std::ios_base::app);
 	if(f.is_open()){
 		f << newtime.tm_mon << "/" << newtime.tm_mday << "/" << 1900 + newtime.tm_year << " "
 		<< newtime.tm_hour << ":" << newtime.tm_min << "," << std::to_string(myScore.getCorrect())
