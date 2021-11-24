@@ -386,6 +386,12 @@ FodyWeavers.xsd
 # JetBrains Rider
 .idea/
 *.sln.iml
+<<<<<<< Updated upstream
 
 /mathkids/mathkids/data/results.csv
 mathkids/mathkids/_data/.DS_Store
+=======
+mathkids/.DS_Store
+*.out
+mathkids/mathkids/a.out
+>>>>>>> Stashed changes

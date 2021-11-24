@@ -2,6 +2,7 @@
 #include "include/GradeLevel.h"
 #include "include/Score.h"
 #include "include/Quiz.h"
+#include "include/Print.h"
 #include <time.h>
 
 void printQuestion(Question, int, bool);
@@ -13,6 +14,7 @@ int main() {
 	std::cout << "Enter grade (1-5): ";
 	std::cin >> grade;
 	Quiz myQuiz = Quiz(grade);
+	Print myPage = Print();
 
 	std::cout << "How many questions?: ";
 	std::cin >> no_questions;
@@ -20,8 +22,13 @@ int main() {
 	Question Q;
 	for (int i = 0; i < no_questions; i++) {
 		Q = myQuiz.generateQuestion();
-		printQuestion(Q, myQuiz.getMode(), myQuiz.display_num_line());
+		//print on screen
+		//myPage.printScreen(Q, myQuiz.getMode(), myQuiz.display_num_line());
+		
+		//print to file
+		myPage.addQuestion(Q);
 
+		/*
 		double result;
 		std::cin >> result;
 
@@ -30,42 +37,14 @@ int main() {
 			std::cout << "\t\t\tCORRECT!\n";		
 		else 
 			std::cout << "\t\t\tWRONG!\n";
-
+		*/
 	}
+	myPage.printPage(myQuiz.getMode(), myQuiz.display_num_line());
 
-	Score myScore = myQuiz.getScore();
-	std::cout << "Score: " << myScore.getCorrect() << "/" << myScore.getTotal() << " " << myScore.getScore()*100 << "% \n";
+	//Score myScore = myQuiz.getScore();
+	//std::cout << "Score: " << myScore.getCorrect() << "/" << myScore.getTotal() << " " << myScore.getScore()*100 << "% \n";
 }
 
 
 
-void printQuestion(Question Q, int mode, bool display_num_line) {
-	//print a number line
-	if (Q.isText()) {
-		std::cout << "Question: " << Q.getText() << ": ";
-	}
-	else {
-		if (display_num_line) {
-			std::cout << "Number line:\n";
-			if (Q.getOperator() == '-' || Q.getOperator() == '+') {
-				for (int i = -10; i <= 10; i++) {
-					std::cout << i << " ";
-				}
-				std::cout << "\n";
-			}
-		}
 
-		//print question
-		if (mode == 0) {		//linear
-			std::cout << "Solve:\n  " << Q.getOperand1() << " " << Q.getOperator() << " " << Q.getOperand2() << " = ";
-		}
-		else if (mode == 1) {	//stacked
-			std::cout << "Solve:\n  " << Q.getOperand1() << "\n" << Q.getOperator() << " " << Q.getOperand2() << "\n-----\n";
-		}
-		else if (mode == 2) {	//reverse
-			std::cout << "Solve:\n   = " << Q.getOperand1() << " " << Q.getOperator() << " " << Q.getOperand2() << "\r";
-		}
-	}
-
-
-}

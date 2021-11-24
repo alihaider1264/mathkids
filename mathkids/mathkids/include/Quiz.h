@@ -141,7 +141,7 @@ bool Quiz::checkQuestion(Question Q, double result) {
 Score Quiz::getScore() {
 	struct tm newtime;
 	time_t now = time(0);
-	localtime_s(&newtime, &now);
+	localtime_r(&now, &newtime);
 	std::ofstream f;
 	f.open("_data/results.csv",std::ios_base::app);
 	if(f.is_open()){

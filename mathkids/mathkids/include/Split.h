@@ -49,4 +49,5 @@ std::string split(std::string str, char seperator, int return_location, bool ret
         }
         return strings[return_location - 1];
     }
+    return "";
 }
