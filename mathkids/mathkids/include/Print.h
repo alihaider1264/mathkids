@@ -5,6 +5,7 @@
 #include <fstream>
 #include <vector>
 #include <ctime>
+#include <iomanip>
 
 class Print{
     std::vector<Question> page;
@@ -66,19 +67,9 @@ bool Print::printPage(const int &mode, bool num_line){
 
             for(Question q : page){
                 if(!q.isText()){
-                    std::cout 
-                    << std::to_string(q.getOperand1()) << " " 
-                    << q.getOperator() << " " 
-                    << std::to_string(q.getOperand2()) << " = \n";
-
-                    
                     f << printMode(q, rand() % 3 + 0); //make dynamic
                 }
                 else{
-                    std::cout 
-                    << q.getText() << " = \n";
-
-                    
                     f << "\n\n" << q.getText() << " =";
                 }
             }
@@ -98,10 +89,8 @@ void Print::printScreen(Question Q, int mode, bool display_num_line) {
 			printNumberLine(Q);
 		}
 
-		printMode(Q, mode);
+		std::cout << printMode(Q, mode);
 	}
-
-
 }
 
 void Print::printNumberLine(Question Q){

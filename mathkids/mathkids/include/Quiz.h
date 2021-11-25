@@ -64,7 +64,7 @@ public:
 	int getNumber();		//generate random operand value
 	char getOperator();		//pick an operator randomly from available operators
 	int getMode();			//pick a question display mode randomly
-	Question generateQuestion();
+	Question generateQuestion(bool);
 	bool checkQuestion(Question, double);
 	Score getScore();
 	bool display_num_line();
@@ -106,21 +106,27 @@ int Quiz::getMode() {
 }
 
 
-Question Quiz::generateQuestion() {
-	int random_num = rand() % 2 + 0;
+Question Quiz::generateQuestion(bool numerical_only) {
 
-	switch (random_num) {
-		
-	case 0:
-		//numerical
+	if(numerical_only){
 		Q = Question(getNumber(), getNumber(), getOperator(), false, "");
 		Q.setResult(calculate());
-		break;
+		return Q;
+	}
+	else{
+		int random_num = rand() % 2 + 0;
+		switch (random_num) {	
+		case 0:
+			//numerical
+			Q = Question(getNumber(), getNumber(), getOperator(), false, "");
+			Q.setResult(calculate());
+			break;
 
-	case 1:
-		//textual
-		Q = Question(0, 0, ' ', true, "");
-		Q = Q.selectRandomTextQuestion();
+		case 1:
+			//textual
+			Q = Question(0, 0, ' ', true, "");
+			Q = Q.selectRandomTextQuestion();
+		}
 	}
 	return Q;
 }
