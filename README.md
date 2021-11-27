@@ -10,5 +10,19 @@ GUI likely in the future.
 
 This is a work in progress.
 
+# Run
+
+Clone the repository to a local folder.
+
+run:
+```
+g++ Source.cpp
+```
+```
+./a.out 1
+```
+
+agr1: 1 (print only), 2 (screen only)
+
 # Contributing
 To contribute, please have a look at open issues.
