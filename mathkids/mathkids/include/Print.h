@@ -52,27 +52,48 @@ bool Print::printPage(const int &mode, bool num_line){
 	time_t now = time(0);
 	localtime_r(&now, &newtime);
 	std::ofstream f;
-	f.open("page1.txt",std::ios_base::out);
+	f.open(std::to_string(time(0))+".html",std::ios_base::out);
 	if(f.is_open()){
             //print date
-            f  << newtime.tm_mon << "/" << newtime.tm_mday << "/" << 1900 + newtime.tm_year + "\n\n";
-
+            f << "<html><head><meta http-equiv=\"content-type\" content=\"text/html;charset=utf-8\" />";
+            f << "<link rel=\"stylesheet\" type=\"text/css\" href=\"site.css\"></head><body>";
+            f << "<table><tr><td colspan=2>";
+            f << std::to_string(1 + (int)newtime.tm_mon) << "/" << newtime.tm_mday << "/" << std::to_string(1900 + (int)newtime.tm_year) + "\n\n";
+            f << "</tr></td>";
+            f << "<tr><td colspan=2>";
             //print number line
-            f << "\n\nNumber line:\n";		
+            f << "Number line:<br>";		
             for (int i = -10; i <= 10; i++) {
                 f << i << " ";
             }
             f << "\n";
-        
-
-            for(Question q : page){
-                if(!q.isText()){
-                    f << printMode(q, rand() % 3 + 0); //make dynamic
+            f << "</tr></td>";
+           
+            std::vector<Question>::iterator it = page.begin();
+            for(;it != page.end(); it++){
+            
+                f << "<tr><td align=\"center\">";
+                if(!it->isText()){
+                    f << printMode(*it, rand() % 3 + 0); //make dynamic
                 }
                 else{
-                    f << "\n\n" << q.getText() << " =";
+                    f << it->getText() << " =";
                 }
+                 f << "</td>";
+
+                 it++;
+
+                 f << "<td align=\"center\">";
+                if(!it->isText()){
+                    f << printMode(*it, rand() % 3 + 0); //make dynamic
+                }
+                else{
+                    f << it->getText() << " =";
+                }
+                 f << "</tr></td>";
+
             }
+            f << "</body></html>";
 	}
 	f.close();
     return true;
@@ -106,13 +127,13 @@ void Print::printNumberLine(Question Q){
 std::string Print::printMode(Question Q, int mode){
     //print question
 		if (mode == 0) {		//linear
-			return "\n\n" + std::to_string(Q.getOperand1()) + " " + Q.getOperator() + " " + std::to_string(Q.getOperand2()) + " = ";
+			return std::to_string(Q.getOperand1()) + " " + Q.getOperator() + " " + std::to_string(Q.getOperand2()) + " = ";
 		}
 		else if (mode == 1) {	//stacked
-			return "\n\n\t" + std::to_string(Q.getOperand1()) + "\n" + Q.getOperator() + "\t" + std::to_string(Q.getOperand2()) + "\n---------\n";
+			return std::to_string(Q.getOperand1()) + "<br>" + Q.getOperator() + "\t" + std::to_string(Q.getOperand2()) + "<br>---------<br>";
 		}
 		else if (mode == 2) {	//reverse
-			return  "\n\n   = " + std::to_string(Q.getOperand1()) + " " + Q.getOperator() + " " + std::to_string(Q.getOperand2()) + "\r";
+			return  "&nbsp;&nbsp;&nbsp;&nbsp;   = " + std::to_string(Q.getOperand1()) + " " + Q.getOperator() + " " + std::to_string(Q.getOperand2());
 		}
     return "";
 }
