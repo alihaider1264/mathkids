@@ -19,10 +19,10 @@ run:
 g++ Source.cpp
 ```
 ```
-./a.out
+./a.out 1
 ```
 
-arg1: 1 (print only), 2 (screen only)
+arg1: 1 (sreen only), 2 (print only)
 
 # Contributing
 To contribute, please have a look at open issues.
