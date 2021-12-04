@@ -8,6 +8,12 @@ body{
    padding: 10px;
 }
 
+#number-line td{
+   border: 1px solid black;
+   border-radius: 20%;
+   
+}
+
 #heading td{
    text-align: center;
  }

@@ -19,10 +19,7 @@ int main(int argc, char *argv[]) {
 	std::cout << "How many questions?: ";
 	std::cin >> no_questions;
 
-	std::string screen = argv[0];
-	std::cout << "screen:" << argv[0];
-
-	
+	std::string screen = argv[1];
 
 	Question Q;
 	if (screen == std::to_string(1)){
@@ -38,24 +35,21 @@ int main(int argc, char *argv[]) {
 				std::cout << "\t\t\tCORRECT!\n";		
 			else 
 				std::cout << "\t\t\tWRONG!\n";
-		}
+			}
 
 		Score myScore = myQuiz.getScore();
 		std::cout << "Score: " << myScore.getCorrect() << "/" << myScore.getTotal() << " " << myScore.getScore()*100 << "% \n";
 	}
 	else{
-
 		for (int i = 0; i < no_questions; i++) {
 			//generate question
 			Q = myQuiz.generateQuestion(true);
 			
 			//add to page vector
 			myPrint.addQuestion(Q);
-
 		}
 		//print questions to file
-		myPrint.printPage(myQuiz.getMode(), myQuiz.display_num_line(), 3); //3 = no of colums to be printed on each page
-
+		myPrint.printPage(myQuiz.getMode(), myQuiz.display_num_line(), 3); //3 = no of colums to be printed on each page // make 3 dynamic
 	}
 }
 
