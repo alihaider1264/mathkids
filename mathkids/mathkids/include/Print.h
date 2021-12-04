@@ -19,7 +19,8 @@ public:
     bool printPage(const int&, bool, int);
     void printScreen(Question, int, bool);
     void printNumberLine(Question);
-    std::string printMode(Question, int);
+    std::string printFileMode(Question, int);
+    std::string printScreenMode(Question, int);
     ~Print(){}
 };
 
@@ -62,21 +63,23 @@ bool Print::printPage(const int &mode, bool num_line, int cols){
             f << "</tr></td>";
             f << "<tr><td colspan=" + std::to_string(cols) + ">";
             //print number line
-            f << "<table><tr>Number line:</tr><tr>";		
+            f << "<table id=\"number-line\"><tr>Number line:</tr><tr>";		
             for (int i = -10; i <= 10; i++) {
-                f << "<td>" << i << "</td>";
+                if (i <= 0) f << "<td>" << i << "</td>";
+                else f << "<td>&nbsp;" << i << "</td>";
+                
                 }
             f << "</tr></table>";
             f << "</tr></td>";
            
             std::vector<Question>::iterator it = page.begin();
-            for(;it != page.end(); it++){
+            while(it != page.end()){
                 f << "<tr>";
                 for(int i=0;i<cols;i++){
             
                     f << "<td>";
                     if(!it->isText()){
-                        f << printMode(*it, rand() % 3 + 0); //make dynamic
+                        f << printFileMode(*it, rand() % 3 + 0); //make 3 dynamic
                     }
                     else{
                         f << it->getText() << " =";
@@ -84,19 +87,9 @@ bool Print::printPage(const int &mode, bool num_line, int cols){
                     f << "</td>";
 
                     it++;
+                    if(it == page.end()) break;
                 }
                 f << "</tr>";
-                
-                /* f << "<td>";
-                if(!it->isText()){
-                    f << printMode(*it, rand() % 3 + 0); //make dynamic
-                }
-                else{
-                    f << it->getText() << " =";
-                }
-                 f << "</td></tr>";
-                 */
-
             }
             f << "</table></body></html>";
 	}
@@ -115,7 +108,7 @@ void Print::printScreen(Question Q, int mode, bool display_num_line) {
 			printNumberLine(Q);
 		}
 
-		std::cout << printMode(Q, mode);
+		std::cout << printScreenMode(Q, mode);
 	}
 }
 
@@ -129,7 +122,7 @@ void Print::printNumberLine(Question Q){
     }
 }
 
-std::string Print::printMode(Question Q, int mode){
+std::string Print::printFileMode(Question Q, int mode){
     //print question
 		if (mode == 0) {		//linear
 			return "<table><tr><td id=\"simple_question\">" + std::to_string(Q.getOperand1()) + " " + Q.getOperator() + " " + std::to_string(Q.getOperand2()) + " = </td></tr></table>";
@@ -139,6 +132,20 @@ std::string Print::printMode(Question Q, int mode){
 		}
 		else if (mode == 2) {	//reverse
 			return  "<table><tr><td id=\"text_question\">&nbsp;&nbsp;&nbsp;&nbsp;   = " + std::to_string(Q.getOperand1()) + " " + Q.getOperator() + " " + std::to_string(Q.getOperand2()) + "</td></tr></table>";
+		}
+    return "";
+}
+
+std::string Print::printScreenMode(Question Q, int mode){
+    //print question
+		if (mode == 0) {		//linear
+			return std::to_string(Q.getOperand1()) + " " + Q.getOperator() + " " + std::to_string(Q.getOperand2()) + " = ";
+		}
+		else if (mode == 1) {	//stacked
+			return "\t" + std::to_string(Q.getOperand1()) + "\n" + Q.getOperator() + "\t" + std::to_string(Q.getOperand2()) + "\n-------\n\t";
+		}
+		else if (mode == 2) {	//reverse
+			return  "\t= " + std::to_string(Q.getOperand1()) + " " + Q.getOperator() + " " + std::to_string(Q.getOperand2());
 		}
     return "";
 }
