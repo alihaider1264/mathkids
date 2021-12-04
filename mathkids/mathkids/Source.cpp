@@ -44,6 +44,7 @@ int main(int argc, char *argv[]) {
 		std::cout << "Score: " << myScore.getCorrect() << "/" << myScore.getTotal() << " " << myScore.getScore()*100 << "% \n";
 	}
 	else{
+
 		for (int i = 0; i < no_questions; i++) {
 			//generate question
 			Q = myQuiz.generateQuestion(true);
@@ -52,8 +53,8 @@ int main(int argc, char *argv[]) {
 			myPrint.addQuestion(Q);
 
 		}
-	//print questions to file
-	myPrint.printPage(myQuiz.getMode(), myQuiz.display_num_line());
+		//print questions to file
+		myPrint.printPage(myQuiz.getMode(), myQuiz.display_num_line(), 3); //3 = no of colums to be printed on each page
 
 	}
 }

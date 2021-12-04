@@ -16,7 +16,7 @@ public:
     bool removeQuestion(int);
     bool isEmpty();
     int questionCount();
-    bool printPage(const int&, bool);
+    bool printPage(const int&, bool, int);
     void printScreen(Question, int, bool);
     void printNumberLine(Question);
     std::string printMode(Question, int);
@@ -44,7 +44,7 @@ int Print::questionCount(){
     return page.size();
 }
 
-bool Print::printPage(const int &mode, bool num_line){
+bool Print::printPage(const int &mode, bool num_line, int cols){
 
     std::cout << "Printing...";
     
@@ -57,43 +57,48 @@ bool Print::printPage(const int &mode, bool num_line){
             //print date
             f << "<html><head><meta http-equiv=\"content-type\" content=\"text/html;charset=utf-8\" />";
             f << "<link rel=\"stylesheet\" type=\"text/css\" href=\"site.css\"></head><body>";
-            f << "<table><tr><td colspan=2>";
+            f << "<table id=\"main-table\"><tr><td colspan=" + std::to_string(cols) + ">";
             f << std::to_string(1 + (int)newtime.tm_mon) << "/" << newtime.tm_mday << "/" << std::to_string(1900 + (int)newtime.tm_year) + "\n\n";
             f << "</tr></td>";
-            f << "<tr><td colspan=2>";
+            f << "<tr><td colspan=" + std::to_string(cols) + ">";
             //print number line
-            f << "Number line:<br>";		
+            f << "<table><tr>Number line:</tr><tr>";		
             for (int i = -10; i <= 10; i++) {
-                f << i << " ";
-            }
-            f << "\n";
+                f << "<td>" << i << "</td>";
+                }
+            f << "</tr></table>";
             f << "</tr></td>";
            
             std::vector<Question>::iterator it = page.begin();
             for(;it != page.end(); it++){
+                f << "<tr>";
+                for(int i=0;i<cols;i++){
             
-                f << "<tr><td align=\"center\">";
+                    f << "<td>";
+                    if(!it->isText()){
+                        f << printMode(*it, rand() % 3 + 0); //make dynamic
+                    }
+                    else{
+                        f << it->getText() << " =";
+                    }
+                    f << "</td>";
+
+                    it++;
+                }
+                f << "</tr>";
+                
+                /* f << "<td>";
                 if(!it->isText()){
                     f << printMode(*it, rand() % 3 + 0); //make dynamic
                 }
                 else{
                     f << it->getText() << " =";
                 }
-                 f << "</td>";
-
-                 it++;
-
-                 f << "<td align=\"center\">";
-                if(!it->isText()){
-                    f << printMode(*it, rand() % 3 + 0); //make dynamic
-                }
-                else{
-                    f << it->getText() << " =";
-                }
-                 f << "</tr></td>";
+                 f << "</td></tr>";
+                 */
 
             }
-            f << "</body></html>";
+            f << "</table></body></html>";
 	}
 	f.close();
     return true;
@@ -127,13 +132,13 @@ void Print::printNumberLine(Question Q){
 std::string Print::printMode(Question Q, int mode){
     //print question
 		if (mode == 0) {		//linear
-			return std::to_string(Q.getOperand1()) + " " + Q.getOperator() + " " + std::to_string(Q.getOperand2()) + " = ";
+			return "<table><tr><td id=\"simple_question\">" + std::to_string(Q.getOperand1()) + " " + Q.getOperator() + " " + std::to_string(Q.getOperand2()) + " = </td></tr></table>";
 		}
 		else if (mode == 1) {	//stacked
-			return std::to_string(Q.getOperand1()) + "<br>" + Q.getOperator() + "\t" + std::to_string(Q.getOperand2()) + "<br>---------<br>";
+			return "<table style=\"border-bottom:2px solid black\"><tr><td></td><td>" + std::to_string(Q.getOperand1()) + "</td></tr><tr><td id=\"stacked_question\">" + Q.getOperator() + "</td><td id=\"stacked_question\">" + std::to_string(Q.getOperand2()) + "</td></tr><tr><td id=\"stacked_question\"></td><td id=\"stacked_question\"></td></tr></table>";
 		}
 		else if (mode == 2) {	//reverse
-			return  "&nbsp;&nbsp;&nbsp;&nbsp;   = " + std::to_string(Q.getOperand1()) + " " + Q.getOperator() + " " + std::to_string(Q.getOperand2());
+			return  "<table><tr><td id=\"text_question\">&nbsp;&nbsp;&nbsp;&nbsp;   = " + std::to_string(Q.getOperand1()) + " " + Q.getOperator() + " " + std::to_string(Q.getOperand2()) + "</td></tr></table>";
 		}
     return "";
 }

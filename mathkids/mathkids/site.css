@@ -1,13 +1,29 @@
-table, table *{
-   border: 1px gray;
-   margin: auto;
+body{
+   font-family: Arial, Helvetica, sans-serif;
+   font-size: 40px;
+   border: 2px solid black;
+}
+
+#main-table table{
    padding: 10px;
 }
-tr {
-   box-shadow: 0 0 0 1px black;
-}
-td {
-   border-color: black;
-   font-family:'Courier New', Courier, monospace;
-   font-size: 20px;
-}
+
+#heading td{
+   text-align: center;
+ }
+
+
+#stacked_question td{
+   text-align: right;
+   border-bottom: 2px solid black;
+ }
+
+#simple_question td{
+   text-align: center;
+   
+ }
+
+#text_question td{
+   text-align: left;
+   
+ }
