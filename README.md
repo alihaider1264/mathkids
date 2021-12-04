@@ -19,7 +19,7 @@ run:
 g++ Source.cpp
 ```
 ```
-./a.out 1
+./a.out
 ```
 
 arg1: 1 (print only), 2 (screen only)
